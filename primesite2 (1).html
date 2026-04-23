@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrimeSite — Web Development Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --deep: #111111;
+      --surface: #161616;
+      --card: #1c1c1c;
+      --border: #2a2a2a;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --white: #f5f0e8;
+      --muted: #888;
+      --text: #d0c9bc;
+      --radius: 4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 5%;
+      backdrop-filter: blur(12px);
+      background: rgba(10,10,10,0.85);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav.scrolled { padding: 14px 5%; }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 9px 22px;
+      border-radius: var(--radius);
+      font-weight: 500 !important;
+      letter-spacing: 0.06em !important;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 24px; height: 1.5px; background: var(--white); transition: 0.3s; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    }
+
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      padding: 14px 34px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 40px rgba(201,168,76,0.2);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px rgba(201,168,76,0.35);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 34px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: fadeUp 1s 0.8s ease both;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollAnim 2s infinite;
+    }
+    @keyframes scrollAnim {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 100px 5%; }
+    section:nth-child(even) { background: var(--deep); }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 560px;
+      font-size: 1rem;
+    }
+
+    .section-head { margin-bottom: 4rem; }
+
+    /* ─── ABOUT ─── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 2px;
+      filter: grayscale(30%) brightness(0.85);
+    }
+    .about-img-wrap::after {
+      content: '';
+      position: absolute;
+      top: 16px; left: 16px; right: -16px; bottom: -16px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 2px;
+      z-index: -1;
+    }
+
+    .about-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .stat-item { border-left: 1px solid var(--border); padding-left: 1rem; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--gold);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 4px; }
+
+    /* ─── SERVICES ─── */
+    #services .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      background: var(--surface);
+      padding: 2.5rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { background: var(--card); }
+
+    .service-icon {
+      width: 44px; height: 44px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .portfolio-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .portfolio-card img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease, filter 0.5s ease;
+      filter: grayscale(20%) brightness(0.8);
+    }
+    .portfolio-card:hover img { transform: scale(1.06); filter: grayscale(0%) brightness(0.7); }
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 30%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .portfolio-card:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-overlay h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+    }
+    .portfolio-overlay span {
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .portfolio-label {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(10,10,10,0.8);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ─── WHY CHOOSE US ─── */
+    #why .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+
+    .why-card {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .why-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); }
+
+    .why-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--gold-dim);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .why-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .why-card p { font-size: 0.85rem; color: var(--muted); }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--deep);
+    }
+    #contact .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .contact-info p { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      font-size: 0.88rem;
+    }
+    .contact-detail-icon {
+      width: 36px; height: 36px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 12px 16px;
+      transition: border-color 0.2s;
+      outline: none;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { min-height: 130px; }
+
+    .btn-submit {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* ─── FOUNDERS ─── */
+    #founders {
+      background: var(--black);
+      text-align: center;
+    }
+
+    .founders-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .founder-card { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    .founder-photo {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      filter: grayscale(20%);
+      transition: border-color 0.3s, filter 0.3s, transform 0.3s;
+      background: var(--surface);
+    }
+    .founder-card:hover .founder-photo {
+      border-color: var(--gold);
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+
+    /* Placeholder avatar */
+    .founder-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--gold);
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .founder-card:hover .founder-avatar {
+      border-color: var(--gold);
+      transform: scale(1.05);
+      background: var(--card);
+    }
+
+    .founder-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+    .founder-role {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── FOOTER BAR ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--black);
+    }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--gold); }
+
+    /* ─── DIVIDER ─── */
+    .gold-divider {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      margin: 1.2rem 0 2rem;
+    }
+
+    /* ─── SOCIAL ICONS ─── */
+    .social-icon {
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .social-icon:hover { color: var(--gold); transform: translateY(-2px); }
+
+    /* ─── PORTFOLIO EMPTY ─── */
+    .portfolio-empty-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .portfolio-empty {
+      border: 1px dashed rgba(201,168,76,0.3);
+      border-radius: 2px;
+      padding: 4rem 2rem;
+      text-align: center;
+      background: var(--surface);
+    }
+    .portfolio-empty-inner { max-width: 480px; margin: 0 auto; }
+    .pe-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .portfolio-empty h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .portfolio-empty p { color: var(--muted); font-size: 0.92rem; }
+
+    .portfolio-slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .slot {
+      border: 1px dashed var(--border);
+      border-radius: 2px;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--border);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 700px) {
+      .portfolio-slots { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.98);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 24px; right: 5%;
+      background: none; border: none;
+      color: var(--white); font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      #about .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      #contact .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .founders-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .founders-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-stat-row { grid-template-columns: repeat(2, 1fr); }
+      section { padding: 70px 5%; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">Prime<span>Site</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact" class="nav-cta">Start a Project</a></li>
+  </ul>
+  <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">About</a>
+  <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
+  <a href="#portfolio" onclick="document.getElementById('mobileMenu').classList.remove('open')">Portfolio</a>
+  <a href="#why" onclick="document.getElementById('mobileMenu').classList.remove('open')">Why Us</a>
+  <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Restaurant Web Specialists · Est. 2026</div>
+    <h1>Websites That <em>Elevate</em><br>Your Business</h1>
+    <p class="hero-sub">PrimeSite crafts premium digital experiences for restaurants and ambitious businesses — from concept to launch, built to convert.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get Your Website Built</a>
+      <a href="#portfolio" class="btn-outline">View Our Work</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Restaurant atmosphere" class="about-img"/>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-label">About PrimeSite</div>
+      <h2 class="section-title">Crafting Digital Presence That <em>Delivers</em></h2>
+      <div class="gold-divider"></div>
+      <p style="color:var(--muted); margin-bottom:1rem;">
+        PrimeSite was founded in 2026 by four teenagers with a clear goal: give restaurants and local businesses the kind of online presence that actually gets people through the door. We're young, hungry, and we take this seriously.
+      </p>
+      <p style="color:var(--muted); margin-bottom:2rem;">
+        We're currently working on our first project — a website for <strong style="color:var(--white);">Kake Da Hotel, Sector 46 HUDA Market, Gurgaon</strong>. We're just getting started, but we're building something real. As we grow, we plan to expand beyond restaurants into retail, services, and more.
+      </p>
+      <div class="about-stat-row">
+        <div class="stat-item">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Projects In Progress</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">2026</div>
+          <div class="stat-label">Founded</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Ambition</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-head reveal" style="text-align:center;">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Services Built for <em>Results</em></h2>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>Website Design</h3>
+      <p>Sharp, good-looking layouts built around your brand. We spend real time on how things look and feel — because first impressions matter.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Web Development</h3>
+      <p>Fast, clean sites that actually work. We handle the tech so you don't have to think about it.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📱</div>
+      <h3>Mobile Optimization</h3>
+      <p>Most people find restaurants on their phones. Your site will look great and load fast on every device — no exceptions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <h3>SEO & Visibility</h3>
+      <p>We set up your site so Google knows you exist — local search optimization, proper metadata, the works.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🍽️</div>
+      <h3>Restaurant Features</h3>
+      <p>Online menus, photo galleries, location info, contact forms — everything a restaurant website actually needs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-head reveal">
+    <div class="section-label">Our Work</div>
+    <h2 class="section-title">Portfolio — <em>Coming Soon</em></h2>
+    <div class="gold-divider"></div>
+    <p class="section-desc">We're currently working on two projects. This space will fill up fast — check back soon.</p>
+  </div>
+  <div class="reveal portfolio-empty-wrap">
+    <div class="portfolio-empty">
+      <div class="portfolio-empty-inner">
+        <div class="pe-icon">🏗️</div>
+        <h3>2 Projects In Progress</h3>
+        <p>We're currently building websites for our first clients — including <strong>Kake Da Hotel</strong>, Sector 46 HUDA Market, Gurgaon.<br>Once they're live, they'll be right here.</p>
+        <a href="#contact" class="btn-primary" style="margin-top:1.5rem; display:inline-block;">Be Our Next Project →</a>
+      </div>
+    </div>
+    <div class="portfolio-slots">
+      <div class="slot">Slot 2 — Reserved</div>
+      <div class="slot">Slot 3 — Reserved</div>
+      <div class="slot">Slot 4 — Reserved</div>
+      <div class="slot">Slot 5 — Reserved</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section id="why">
+  <div class="section-head reveal" style="text-align:center;">
+    <div class="section-label">Why PrimeSite</div>
+    <h2 class="section-title">The PrimeSite <em>Advantage</em></h2>
+  </div>
+  <div class="why-grid reveal">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <h3>We Actually Care</h3>
+      <p>We're not a big agency with 50 clients at once. You're one of our first — so we're giving it everything.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <h3>Sharp Design</h3>
+      <p>We care about how things look. A lot. Your site won't look like it was made in 2012.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <h3>Affordable</h3>
+      <p>We're young and just starting out — which means real, professional websites at prices that make sense for small businesses.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <h3>Transparent</h3>
+      <p>No jargon, no hidden fees, no ghosting. We tell you what we're building, when it'll be done, and what it costs.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">05</div>
+      <h3>Fast Turnaround</h3>
+      <p>We move quickly. We're not sitting on your project for months — we want to see it live as much as you do.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">06</div>
+      <h3>Built to Grow</h3>
+      <p>We're growing too. As we take on more projects and industries, you'll have a team that knows you from day one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="reveal">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Start Your <em>Project</em></h2>
+      <div class="gold-divider"></div>
+      <div class="contact-info">
+        <p>Got a restaurant that needs a website? Or just curious what we can do for you? Drop us a message — we'll get back to you soon.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📧</div>
+          <span>primesite.agency224@gmail.com</span>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <span>+91 73584 29569</span>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🕐</div>
+          <span>Available on business days only<br><em style="font-size:0.78rem; color:#666;">Mon – Fri · We'll reply as soon as we can</em></span>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🌐</div>
+          <span>Remote · Based in Gurgaon, India</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/xzzbjqgw" method="POST" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="_replyto" value="primesite.agency224@gmail.com"/>
+        <input type="hidden" name="_subject" value="New PrimeSite Enquiry 🚀"/>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Jane Smith" required/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="jane@yourrestaurant.com" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="business">Business Name</label>
+          <input type="text" id="business" placeholder="Your Restaurant / Business"/>
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" placeholder="Tell us about your project, your timeline, and what you're looking for..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message →</button>
+        <div id="form-success" style="display:none; color:var(--gold); font-size:0.88rem; margin-top:0.5rem;">
+          ✓ Message sent! We'll be in touch within 24 hours.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section id="founders">
+  <div class="reveal">
+    <div class="section-label" style="text-align:center;">The Team</div>
+    <h2 class="section-title" style="text-align:center;">Meet Our <em>Founders</em></h2>
+    <div class="gold-divider" style="margin:1.2rem auto 0;"></div>
+    <p style="text-align:center; color:var(--muted); max-width:500px; margin:1.5rem auto 0; font-size:0.92rem;">Four teenagers who decided that waiting to grow up before building something real was a waste of time.</p>
+  </div>
+  <div class="founders-grid reveal">
+    <div class="founder-card">
+      <div class="founder-avatar" title="Replace with photo">AM</div>
+      <div class="founder-name">Arjun Makkar</div>
+      <div class="founder-role">Co-Founder</div>
+    </div>
+    <div class="founder-card">
+      <div class="founder-avatar" title="Replace with photo">RK</div>
+      <div class="founder-name">Ryan Niraj Khalpada</div>
+      <div class="founder-role">Co-Founder</div>
+    </div>
+    <div class="founder-card">
+      <div class="founder-avatar" title="Replace with photo">RW</div>
+      <div class="founder-name">Ryan Wason</div>
+      <div class="founder-role">Co-Founder</div>
+    </div>
+    <div class="founder-card">
+      <div class="founder-avatar" title="Replace with photo">VB</div>
+      <div class="founder-name">Vivaan Bhadani</div>
+      <div class="founder-role">Co-Founder</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2026 PrimeSite Agency. All rights reserved.</div>
+  <div style="display:flex; gap:1.2rem; align-items:center;">
+    <a href="https://www.instagram.com/primesite224" target="_blank" rel="noopener" class="social-icon" title="Instagram">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="https://twitter.com/primesite224" target="_blank" rel="noopener" class="social-icon" title="Twitter / X">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="#hero" style="color:var(--muted); font-size:0.78rem; text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Back to Top ↑</a>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll shrink
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit via Formspree
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.btn-submit');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('form-success').style.display = 'block';
+        form.reset();
+        setTimeout(() => { document.getElementById('form-success').style.display = 'none'; }, 6000);
+      } else {
+        alert('Something went wrong. Please email us directly at primesite.agency224@gmail.com');
+      }
+    } catch {
+      alert('Something went wrong. Please email us directly at primesite.agency224@gmail.com');
+    }
+    btn.textContent = 'Send Message →';
+    btn.disabled = false;
+  }
+</script>
+</body>
+</html>
